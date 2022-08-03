@@ -11,16 +11,31 @@ connect.then((db)=>{
     Dishes.create({
         name:'UthaPizza',
         description:'Test'
+
     }).then((dish)=>{
         console.log(dish);
-        return Dishes.find({}).exec();
-    }).then((dishes)=>{
-        console.log(dishes);
+        
+        return Dishes.findByIdAndUpdate(dish._id,{ $set : {description:'Updated test'}},{new:true}).exec();
+
+    }).then((dish)=>{
+        console.log(dish);
+        dish.comments.push({
+            rating:4,
+            comment:'Good Taste of Food',
+            author:'Leonardo Di Carpaccio'
+        })
+        return dish.save();
+
+    }).then((dish)=>{
+        console.log(dish);
+
         return Dishes.deleteMany({});
     }).then((res)=>{
         console.log(res);
 
         return mongoose.connection.close();
+    }).catch((err)=>{
+        console.log(err);
     })
 
 }).catch((err)=>{
